@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 
 using KeyVault.Acmebot.Models;
 
@@ -39,6 +40,19 @@ namespace KeyVault.Acmebot
             log.LogInformation($"Started orchestration with ID = '{instanceId}'.");
 
             return starter.CreateCheckStatusResponse(req, instanceId, true);
+        }
+
+        [FunctionName(nameof(add-certificate))]
+        public static async Task<HttpResponseMessage> AddCertificate(HttpRequestMessage req, TraceWriter log)
+        {
+            log.Info($"C# HTTP trigger function processed a request. RequestUri={req.RequestUri}");
+        
+            string html = File.ReadAllText("index.v2.html");
+            
+            var response = new HttpResponseMessage(HttpStatusCode.OK);
+            response.Content = new StringContent(html);
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
+            return response;
         }
     }
 }
